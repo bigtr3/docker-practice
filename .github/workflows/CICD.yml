@@ -70,12 +70,12 @@ jobs:
           username: ubuntu
           host: ${{ secrets.LIVE_SERVER_IP }}
           key: ${{ secrets.EC2_SSH_KEY }}
-          script_stop: true
           script: |
-            echo "MYSQL_ROOT_PASSWORD=${{ secrets.MYSQL_ROOT_PASSWORD }}" > .env
-            echo "MYSQL_DATABASE=${{ secrets.MYSQL_DATABASE }}" >> .env
-            echo "MYSQL_USER=${{ secrets.MYSQL_USER }}" >> .env
-            echo "MYSQL_PASSWORD=${{ secrets.MYSQL_PASSWORD }}" >> .env
+            sudo sh -c 'echo "MYSQL_ROOT_PASSWORD=${{ secrets.MYSQL_ROOT_PASSWORD }}" > /home/ubuntu/.env'
+            sudo sh -c 'echo "MYSQL_DATABASE=${{ secrets.MYSQL_DATABASE }}" >> /home/ubuntu/.env'
+            sudo sh -c 'echo "MYSQL_USER=${{ secrets.MYSQL_USER }}" >> /home/ubuntu/.env'
+            sudo sh -c 'echo "MYSQL_PASSWORD=${{ secrets.MYSQL_PASSWORD }}" >> /home/ubuntu/.env'
+            sudo chown ubuntu:ubuntu /home/ubuntu/.env
 
       - name: Docker compose
         uses: appleboy/ssh-action@master

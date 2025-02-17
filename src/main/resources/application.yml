@@ -1,13 +1,13 @@
 spring:
   profiles:
-    active: local
+    active: ${PROFILES:local}  # Docker environment variable
     group:
       local: local, common, secret
       blue: blue, common, secret
       green: green, common, secret
 
 server:
-  env : blue
+  env: ${ENV:local}  # Docker environment variable
 
 ---
 
@@ -15,11 +15,9 @@ spring:
   config:
     activate:
       on-profile: local
-
 server:
   port: 8080
-  serverAddress : localhost
-
+  serverAddress: localhost
 serverName: local_server
 
 ---
@@ -28,11 +26,9 @@ spring:
   config:
     activate:
       on-profile: blue
-
 server:
   port: 8080
-  serverAddress : 43.200.199.115
-
+  serverAddress: 43.200.199.115
 serverName: blue_server
 
 ---
@@ -41,11 +37,9 @@ spring:
   config:
     activate:
       on-profile: green
-
 server:
   port: 8081
-  serverAddress : 43.200.199.115
-
+  serverAddress: 43.200.199.115
 serverName: green_server
 
 ---

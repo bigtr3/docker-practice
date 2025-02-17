@@ -1,61 +1,80 @@
 spring:
   profiles:
-    active: ${PROFILES:local}  # Docker environment variable
+    active: ${PROFILES:local}
     group:
       local: local, common, secret
       blue: blue, common, secret
       green: green, common, secret
 
 server:
-  env: ${ENV:local}  # Docker environment variable
+  env: ${ENV:local}
 
 ---
-
 spring:
   config:
     activate:
       on-profile: local
+  datasource:
+    url: jdbc:h2:mem:testdb
+    driverClassName: org.h2.Driver
+    username: sa
+    password: ''
+  h2:
+    console:
+      enabled: true
 server:
   port: 8080
   serverAddress: localhost
 serverName: local_server
 
 ---
-
 spring:
   config:
     activate:
       on-profile: blue
+  datasource:
+    url: jdbc:mysql://mysql:3306/livedb?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+    username: ${MYSQL_USER}
+    password: ${MYSQL_PASSWORD}
+    driver-class-name: com.mysql.cj.jdbc.Driver
 server:
   port: 8080
   serverAddress: 43.200.199.115
 serverName: blue_server
 
 ---
-
 spring:
   config:
     activate:
       on-profile: green
+  datasource:
+    url: jdbc:mysql://mysql:3306/livedb?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+    username: ${MYSQL_USER}
+    password: ${MYSQL_PASSWORD}
+    driver-class-name: com.mysql.cj.jdbc.Driver
 server:
   port: 8081
   serverAddress: 43.200.199.115
 serverName: green_server
 
 ---
-
 spring:
   config:
     activate:
       on-profile: common
   application:
     name: practice
-  h2:
-    console:
-      enabled: true
   jpa:
     hibernate:
       ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL8Dialect
+    show-sql: true
+  data:
+    redis:
+      host: redis
+      port: 6379
 
 springdoc:
   api-docs:
